@@ -133,9 +133,11 @@ dmypy.json
 # Project-specific
 models/*.pkl
 models/*.joblib
-data/raw/*.csv
-data/processed/*.parquet
+models/*.parquet
+data/raw/
+data/processed/
 reports/*.html
 reports/*.png
 reports/*.pdf
+reports/dataset_metadata.json
 *.tmp
