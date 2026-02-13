@@ -1,15 +1,29 @@
-.PHONY: install ingest train backtest
+.PHONY: install ingest train backtest test lint format
 
 install:
-\tpip install -r requirements.txt
+	pip install -r requirements.txt
+
+test:
+	pytest tests/ -v
+
+coverage:
+	pytest tests/ -v --cov=src --cov-report=term-missing
+
+lint:
+	ruff check src/ tests/
+	black --check src/ tests/
+
+format:
+	black src/ tests/
+	ruff check --fix src/ tests/
 
 ingest:
-\tpython -m src.ingestion
-\tpython -m src.validation
-\tpython -m src.features
+	python -m src.ingestion
+	python -m src.validation
+	python -m src.features
 
 train:
-\tpython -m src.train
+	python -m src.train
 
 backtest:
-\tpython -m src.backtest
+	python -m src.backtest
