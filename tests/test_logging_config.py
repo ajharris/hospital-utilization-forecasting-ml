@@ -36,7 +36,9 @@ class TestConfigureLogging:
         root_logger = logging.getLogger()
         handlers = root_logger.handlers
         # At least one handler should have a formatter
-        assert any(h.formatter is not None for h in handlers if isinstance(h, logging.StreamHandler))
+        assert any(
+            h.formatter is not None for h in handlers if isinstance(h, logging.StreamHandler)
+        )
 
     def test_configure_logging_can_log(self) -> None:
         """Test logger can successfully log messages after configuration."""

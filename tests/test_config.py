@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from src.config import ProjectPaths, Settings, get_project_root, get_paths
+from src.config import ProjectPaths, Settings, get_paths, get_project_root
 
 
 class TestProjectPaths:
