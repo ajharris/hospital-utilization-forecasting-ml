@@ -1,4 +1,4 @@
-.PHONY: install ingest train backtest test lint format
+.PHONY: install ingest train backtest test lint format features
 
 install:
 	pip install -r requirements.txt
@@ -29,3 +29,6 @@ train:
 
 backtest:
 	python -m src.backtest
+
+features:
+	python -m src.features
