@@ -18,6 +18,11 @@ class Settings:
     random_seed: int = 42
     time_col: str = "timestamp"
     target_col: str = "y"
+    dataset_provider: str = "statcan"
+    dataset_id: str = "18100004"
+    dataset_params: dict[str, str] | None = None
+    raw_filename: str = "raw.parquet"
+    metadata_filename: str = "dataset_metadata.json"
 
 
 def get_project_root() -> Path:

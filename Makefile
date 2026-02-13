@@ -19,8 +19,6 @@ format:
 
 ingest:
 	python -m src.ingestion
-	python -m src.validation
-	python -m src.features
 
 train:
 	python -m src.train
