@@ -25,7 +25,9 @@ class StubProvider:
 
 
 @pytest.mark.unit
-def test_ingest_writes_parquet_and_metadata(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_ingest_writes_parquet_and_metadata(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     """Ingestion writes parquet and metadata JSON."""
     df = pd.DataFrame(
         {
@@ -77,11 +79,7 @@ def test_ingest_uses_local_cached_file(tmp_path: Path, monkeypatch: pytest.Monke
     if not raw_dir.exists():
         pytest.skip("Cached dataset file not available.")
 
-    candidates = [
-        path
-        for path in raw_dir.glob("*.csv")
-        if "metadata" not in path.name.lower()
-    ]
+    candidates = [path for path in raw_dir.glob("*.csv") if "metadata" not in path.name.lower()]
     if not candidates:
         pytest.skip("No cached dataset CSV found in data/raw.")
 
