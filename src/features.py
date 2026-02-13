@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from src.config import Settings, get_paths
+from src.config import Settings
 from src.logging_config import configure_logging
 
 logger = logging.getLogger(__name__)
@@ -37,7 +37,7 @@ def _pct_change_feature(series: pd.Series, group_keys: pd.Series) -> pd.Series:
 def build_features(
     df: pd.DataFrame,
     settings: Settings | None = None,
-    include_rolling_std: bool = False,
+    include_rolling_std: bool = True,
     include_province_agg: bool = False,
 ) -> pd.DataFrame:
     """Create time-series features.
@@ -128,6 +128,9 @@ def build_features(
 def run_feature_engineering(settings: Settings | None = None) -> Path:
     """Load validated data, build features, and write processed parquet."""
     settings = settings or Settings()
+    # import get_paths at runtime so tests can monkeypatch src.config.get_paths
+    from src.config import get_paths
+
     paths = get_paths()
     paths.data_processed.mkdir(parents=True, exist_ok=True)
 
