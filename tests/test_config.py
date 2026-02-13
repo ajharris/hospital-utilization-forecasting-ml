@@ -44,15 +44,25 @@ class TestSettings:
         """Test Settings has correct defaults."""
         settings = Settings()
         assert settings.random_seed == 42
-        assert settings.time_col == "timestamp"
-        assert settings.target_col == "y"
+        assert settings.time_col == "REF_DATE"
+        assert settings.target_col == "VALUE"
+        assert settings.hospital_col == "GEO"
+        assert settings.province_col == "GEO"
 
     def test_settings_custom_values(self) -> None:
         """Test Settings can be customized."""
-        settings = Settings(random_seed=123, time_col="date", target_col="target")
+        settings = Settings(
+            random_seed=123,
+            time_col="date",
+            target_col="target",
+            hospital_col="hospital",
+            province_col="province_code",
+        )
         assert settings.random_seed == 123
         assert settings.time_col == "date"
         assert settings.target_col == "target"
+        assert settings.hospital_col == "hospital"
+        assert settings.province_col == "province_code"
 
     def test_settings_immutable(self) -> None:
         """Test Settings is immutable (frozen)."""

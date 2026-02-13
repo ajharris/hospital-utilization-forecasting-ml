@@ -19,6 +19,10 @@ format:
 
 ingest:
 	python -m src.ingestion
+	python -m src.validation
+
+validate:
+	python -m src.validation
 
 train:
 	python -m src.train

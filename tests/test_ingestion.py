@@ -47,7 +47,12 @@ def test_ingest_writes_parquet_and_metadata(
     monkeypatch.setattr("src.ingestion._get_provider", lambda _: StubProvider(df))
     monkeypatch.setattr("src.ingestion._make_dataset_ref", lambda _: object())
 
-    settings = Settings(dataset_provider="statcan", dataset_id="test_dataset")
+    settings = Settings(
+        dataset_provider="statcan",
+        dataset_id="test_dataset",
+        time_col="timestamp",
+        target_col="y",
+    )
     output_path = ingest(settings=settings)
 
     assert output_path.exists()

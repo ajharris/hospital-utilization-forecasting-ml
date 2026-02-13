@@ -16,8 +16,10 @@ class ProjectPaths:
 @dataclass(frozen=True)
 class Settings:
     random_seed: int = 42
-    time_col: str = "timestamp"
-    target_col: str = "y"
+    time_col: str = "REF_DATE"
+    target_col: str = "VALUE"
+    hospital_col: str = "GEO"
+    province_col: str = "GEO"
     dataset_provider: str = "statcan"
     dataset_id: str = "18100004"
     dataset_params: dict[str, str] | None = None
