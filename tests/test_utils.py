@@ -1,8 +1,9 @@
 """Unit tests for src.utils module."""
 
-import pytest
-import pandas as pd
 import numpy as np
+
+import pandas as pd
+import pytest
 
 from src.utils import TimeSplit, time_train_test_split, rolling_window_cv
 

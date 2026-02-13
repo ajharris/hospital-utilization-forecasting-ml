@@ -1,9 +1,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Generator, Iterable, Tuple
+from typing import Generator, Tuple
 
-import numpy as np
 import pandas as pd
 
 

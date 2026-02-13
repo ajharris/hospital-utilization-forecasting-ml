@@ -1,7 +1,8 @@
 """Unit tests for src.config module."""
 
-import pytest
 from pathlib import Path
+
+import pytest
 
 from src.config import ProjectPaths, Settings, get_project_root, get_paths
 

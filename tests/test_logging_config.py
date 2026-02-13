@@ -1,7 +1,6 @@
 """Unit tests for src.logging_config module."""
 
 import logging
-import pytest
 
 from src.logging_config import configure_logging
 
