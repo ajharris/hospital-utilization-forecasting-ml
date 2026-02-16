@@ -55,30 +55,40 @@ def build_features(
     df[time_col] = pd.to_datetime(df[time_col])
     df = df.sort_values([hospital_col, time_col]).reset_index(drop=True)
 
+    feature_cols: list[str] = []
+
     df["day_of_week"] = df[time_col].dt.dayofweek
     df["month"] = df[time_col].dt.month
     df["month_sin"] = np.sin(2 * np.pi * df["month"] / 12)
     df["month_cos"] = np.cos(2 * np.pi * df["month"] / 12)
+    feature_cols.extend(["day_of_week", "month", "month_sin", "month_cos"])
 
     for lag in (1, 3, 6):
-        df[f"lag_{lag}"] = df.groupby(hospital_col)[target_col].shift(lag)
+        col = f"lag_{lag}"
+        df[col] = df.groupby(hospital_col)[target_col].shift(lag)
+        feature_cols.append(col)
 
     for window in (3, 6, 12):
-        df[f"roll_mean_{window}"] = _rolling_feature(
+        mean_col = f"roll_mean_{window}"
+        df[mean_col] = _rolling_feature(
             df[target_col],
             df[hospital_col],
             window,
             "mean",
         )
+        feature_cols.append(mean_col)
         if include_rolling_std:
-            df[f"roll_std_{window}"] = _rolling_feature(
+            std_col = f"roll_std_{window}"
+            df[std_col] = _rolling_feature(
                 df[target_col],
                 df[hospital_col],
                 window,
                 "std",
             )
+            feature_cols.append(std_col)
 
     df["pct_change_1"] = _pct_change_feature(df[target_col], df[hospital_col])
+    feature_cols.append("pct_change_1")
 
     if include_province_agg and province_col in df.columns:
         province_series = (
@@ -90,37 +100,36 @@ def build_features(
         province_series["prov_mean_lag_1"] = province_series.groupby(province_col)[
             target_col
         ].shift(1)
+        feature_cols.append("prov_mean_lag_1")
         for window in (3, 6, 12):
-            province_series[f"prov_mean_roll_{window}"] = _rolling_feature(
+            mean_col = f"prov_mean_roll_{window}"
+            province_series[mean_col] = _rolling_feature(
                 province_series[target_col],
                 province_series[province_col],
                 window,
                 "mean",
             )
+            feature_cols.append(mean_col)
             if include_rolling_std:
-                province_series[f"prov_mean_roll_std_{window}"] = _rolling_feature(
+                std_col = f"prov_mean_roll_std_{window}"
+                province_series[std_col] = _rolling_feature(
                     province_series[target_col],
                     province_series[province_col],
                     window,
                     "std",
                 )
+                feature_cols.append(std_col)
         df = df.merge(
             province_series.drop(columns=[target_col]),
             on=[province_col, time_col],
             how="left",
         )
 
-    feature_cols = [
-        col
-        for col in df.columns
-        if col
-        not in {
-            time_col,
-            target_col,
-            hospital_col,
-            province_col,
-        }
-    ]
+    base_cols = [time_col, target_col, hospital_col]
+    if province_col not in base_cols:
+        base_cols.append(province_col)
+    df = df[base_cols + feature_cols]
+    df[feature_cols] = df[feature_cols].replace([np.inf, -np.inf], np.nan)
     df = df.dropna(subset=feature_cols).reset_index(drop=True)
     return df
 
