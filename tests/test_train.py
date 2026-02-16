@@ -155,7 +155,9 @@ def test_baseline_locf_uses_last_values() -> None:
     assert preds[1] == 40.0
     assert isinstance(model_state, dict), f"model_state should be a dict, got {type(model_state)}"
     assert model_state["type"] == "locf"
-    assert isinstance(model_state.get("last_values"), dict), f"last_values should be a dict, got {type(model_state.get('last_values'))}"
+    assert isinstance(
+        model_state.get("last_values"), dict
+    ), f"last_values should be a dict, got {type(model_state.get('last_values'))}"
     assert model_state["last_values"]["H1"] == 20.0
     assert model_state["last_values"]["H2"] == 40.0
 
