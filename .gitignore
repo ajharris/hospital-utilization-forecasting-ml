@@ -140,4 +140,5 @@ reports/*.html
 reports/*.png
 reports/*.pdf
 reports/dataset_metadata.json
+reports/*.json
 *.tmp
