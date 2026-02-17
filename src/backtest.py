@@ -14,6 +14,7 @@ from sklearn.metrics import (
 )
 
 from src.config import Settings, get_paths
+from src.experiments import append_experiment_record, build_run_record
 from src.logging_config import configure_logging
 
 logger = logging.getLogger(__name__)
@@ -219,6 +220,28 @@ def run_backtest(
     out_path = paths.reports / "backtest_metrics.json"
     out_path.write_text(json.dumps(_sanitize_payload(payload), indent=2, sort_keys=True))
     logger.info("Wrote backtest metrics to %s", out_path)
+
+    run_record = build_run_record(
+        model_type="ridge_regression_backtest",
+        params={
+            "window_type": window_type,
+            "n_splits": n_splits,
+            "test_size": test_size,
+            "min_train_size": min_train_size,
+            "rolling_train_size": rolling_train_size,
+            "random_seed": settings.random_seed,
+            "model_params": {
+                "ridge_alpha": 1.0,
+            },
+        },
+        metrics={
+            "n_folds": len(results),
+            "summary": summary,
+        },
+        settings=settings,
+    )
+    append_experiment_record(run_record)
+
     return out_path
 
 
