@@ -1,4 +1,4 @@
-.PHONY: install ingest train backtest test lint format features
+.PHONY: install ingest train backtest hierarchical test lint format features
 
 install:
 	pip install -r requirements.txt
@@ -29,6 +29,9 @@ train:
 
 backtest:
 	python -m src.backtest
+
+hierarchical:
+	python -m src.hierarchical
 
 features:
 	python -m src.features
