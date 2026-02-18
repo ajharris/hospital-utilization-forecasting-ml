@@ -12,8 +12,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN make ingest
-RUN make train
-RUN make backtest
-
-CMD ["python", "-m", "src.train"]
+CMD ["make", "pipeline"]
