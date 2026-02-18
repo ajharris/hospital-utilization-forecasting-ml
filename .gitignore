@@ -141,6 +141,7 @@ reports/*.png
 reports/*.pdf
 reports/dataset_metadata.json
 reports/*.json
+reports/*.jsonl
 *.tmp
 reports/*.md
 

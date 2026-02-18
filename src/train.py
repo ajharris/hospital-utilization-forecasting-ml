@@ -11,6 +11,7 @@ from sklearn.linear_model import Ridge
 
 from src.config import Settings
 from src.evaluate import evaluate_predictions
+from src.experiments import append_experiment_record, build_run_record
 from src.logging_config import configure_logging
 from src.utils import time_train_test_split
 
@@ -97,6 +98,21 @@ def train_models(settings: Settings | None = None, test_size: float = 0.2) -> di
     metrics_path = paths.reports / "metrics.json"
     metrics_path.write_text(json.dumps(metrics, indent=2, sort_keys=True))
     logger.info("Saved metrics to %s", metrics_path)
+
+    run_record = build_run_record(
+        model_type="baseline_locf+ridge_regression",
+        params={
+            "test_size": test_size,
+            "random_seed": settings.random_seed,
+            "model_params": {
+                "ridge_alpha": 1.0,
+            },
+        },
+        metrics=metrics,
+        settings=settings,
+        paths=paths,
+    )
+    append_experiment_record(run_record)
 
     return {
         "baseline_model": baseline_path,
