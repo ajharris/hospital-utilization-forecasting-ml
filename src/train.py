@@ -110,6 +110,7 @@ def train_models(settings: Settings | None = None, test_size: float = 0.2) -> di
         },
         metrics=metrics,
         settings=settings,
+        paths=paths,
     )
     append_experiment_record(run_record)
 

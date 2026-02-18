@@ -239,6 +239,7 @@ def run_backtest(
             "summary": summary,
         },
         settings=settings,
+        paths=paths,
     )
     append_experiment_record(run_record)
 

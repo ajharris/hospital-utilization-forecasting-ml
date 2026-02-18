@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from src.config import Settings
+from src.config import ProjectPaths, Settings
 
 logger = logging.getLogger(__name__)
 
@@ -31,12 +31,16 @@ def _sanitize_payload(value: Any) -> Any:
     return value
 
 
-def dataset_fingerprint(settings: Settings | None = None) -> str:
+def dataset_fingerprint(
+    settings: Settings | None = None,
+    *,
+    paths: ProjectPaths | None = None,
+) -> str:
     # Import at runtime so tests can monkeypatch src.config.get_paths
     from src.config import get_paths
 
     settings = settings or Settings()
-    paths = get_paths()
+    paths = paths or get_paths()
     features_path = paths.data_processed / "features.parquet"
     if features_path.exists():
         return _hash_file(features_path)
@@ -81,11 +85,12 @@ def build_run_record(
     params: dict[str, Any],
     metrics: dict[str, Any],
     settings: Settings | None = None,
+    paths: ProjectPaths | None = None,
 ) -> dict[str, Any]:
     record_settings = settings or Settings()
     record = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
-        "dataset_fingerprint": dataset_fingerprint(record_settings),
+        "dataset_fingerprint": dataset_fingerprint(record_settings, paths=paths),
         "model_type": model_type,
         "params": _sanitize_payload(params),
         "metrics": _sanitize_payload(metrics),
