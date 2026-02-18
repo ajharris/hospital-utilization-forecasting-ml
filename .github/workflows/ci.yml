@@ -43,3 +43,27 @@ jobs:
         with:
           file: ./coverage.xml
           fail_ci_if_error: false
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t hospital-forecast .
+
+      - name: Run pipeline in container
+        run: docker run --rm -v "$PWD":/app hospital-forecast
+
+      - name: Verify artifacts
+        run: |
+          test -d data
+          test -d models
+          test -d reports
+          test -s data/raw/raw.parquet
+          test -s data/processed/validated.parquet
+          test -s data/processed/features.parquet
+          test -s models/baseline_locf.joblib
+          test -s models/ridge_regression.joblib
+          test -s reports/metrics.json
+          test -s reports/backtest_metrics.json

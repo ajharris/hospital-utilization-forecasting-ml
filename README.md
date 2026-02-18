@@ -107,12 +107,26 @@ Run backtesting:
 make backtest
 ```
 
+Run the full pipeline:
+
+```bash
+make pipeline
+```
+
 Or via Docker:
 
 ```bash
 docker build -t hospital-forecast .
-docker run hospital-forecast
+docker run --rm -v "$PWD":/app hospital-forecast
 ```
+
+If you omit the bind mount, artifacts are written inside the container and discarded on exit.
+
+Pipeline outputs are written to:
+
+- `data/` (raw + processed datasets)
+- `models/` (trained model artifacts)
+- `reports/` (metrics and metadata)
 
 ## Key Learnings
 

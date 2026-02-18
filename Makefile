@@ -1,4 +1,4 @@
-.PHONY: help install ingest train backtest hierarchical test lint format features coverage validate
+.PHONY: help install ingest train backtest hierarchical test lint format features coverage validate pipeline
 
 help:
 	@awk 'BEGIN {FS = ":.*##"} /^[a-zA-Z0-9_.-]+:.*##/ {printf "  %-16s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -38,3 +38,9 @@ hierarchical: ## Run hierarchical model
 
 features: ## Build features
 	python -m src.features
+
+pipeline: ## Run full pipeline (ingest -> features -> train -> backtest)
+	$(MAKE) ingest
+	$(MAKE) features
+	$(MAKE) train
+	$(MAKE) backtest
