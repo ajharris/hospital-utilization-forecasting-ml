@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from src.config import Settings, get_paths
+from src.config import Settings
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +32,9 @@ def _sanitize_payload(value: Any) -> Any:
 
 
 def dataset_fingerprint(settings: Settings | None = None) -> str:
+    # Import at runtime so tests can monkeypatch src.config.get_paths
+    from src.config import get_paths
+
     settings = settings or Settings()
     paths = get_paths()
     features_path = paths.data_processed / "features.parquet"
@@ -59,6 +62,9 @@ def git_commit_sha() -> str | None:
 
 
 def append_experiment_record(record: dict[str, Any]) -> Path:
+    # Import at runtime so tests can monkeypatch src.config.get_paths
+    from src.config import get_paths
+
     paths = get_paths()
     paths.reports.mkdir(parents=True, exist_ok=True)
     out_path = paths.reports / "experiments.jsonl"
