@@ -1,37 +1,40 @@
-.PHONY: install ingest train backtest hierarchical test lint format features
+.PHONY: help install ingest train backtest hierarchical test lint format features coverage validate
 
-install:
+help:
+	@awk 'BEGIN {FS = ":.*##"} /^[a-zA-Z0-9_.-]+:.*##/ {printf "  %-16s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+
+install: ## Install dependencies
 	pip install -r requirements.txt
 
-test:
+test: ## Run tests
 	pytest tests/ -v
 
-coverage:
+coverage: ## Run tests with coverage
 	pytest tests/ -v --cov=src --cov-report=term-missing
 
-lint:
+lint: ## Run linters
 	ruff check src/ tests/
 	black --check src/ tests/
 
-format:
+format: ## Format code
 	black src/ tests/
 	ruff check --fix src/ tests/
 
-ingest:
+ingest: ## Run ingestion and validation
 	python -m src.ingestion
 	python -m src.validation
 
-validate:
+validate: ## Run validation only
 	python -m src.validation
 
-train:
+train: ## Train model
 	python -m src.train
 
-backtest:
+backtest: ## Run backtest
 	python -m src.backtest
 
-hierarchical:
+hierarchical: ## Run hierarchical model
 	python -m src.hierarchical
 
-features:
+features: ## Build features
 	python -m src.features
